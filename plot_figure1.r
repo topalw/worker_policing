@@ -142,14 +142,19 @@ idxs <- match(genetic_ids,coord2$id)
 coord2$nearest_genetic_id <- NA
 coord2$nearest_physical_dist <-NA
 coord2$nearest_max_cluster <- NA
+coord2$nearest_cluster_id <- NA
 for(i in 1:nrow(coord2)){
   min <- which.min(dist_mat[i,idxs])
   coord2$nearest_genetic_id[i] <- names(min)
   coord2$nearest_physical_dist[i] <- dist_mat[i,idxs][min]
-  coord2$nearest_max_cluster[i] <- max(a[match(coord2$nearest_genetic_id[i],s$id),])
+  coord2$nearest_max_cluster[i] <- max(admix[match(coord2$nearest_genetic_id[i],s$id),])
+  coord2$nearest_cluster_id[i] <-as.numeric(which.max(admix[match(coord2$nearest_genetic_id[i],s$id),]))
 }
 
+coord2[match(b$id[1:36],coord2$id),] %>% select(id,azimuth,size,lon,lat,
+                                                contains('nearest')) -> tmp
 
+write.table(tmp,'1.data/samples_with_cluster_assignment.txt',quote=F,row.names=F)
 # get genetic distance of samples we want 
 # read covariance 
 cov <- as.matrix(read.table('1.data/All_pruned_para.cov'))
