@@ -34,7 +34,8 @@ names(coord) <- c('id','date','azimuth','size','alates','altitude','habitat','li
 b <- read.table('1.data/full_observed_nests.txt',sep='\t',h=T)
 names(b) <- c('id','size','geometry','collection','sexual')
 # filter out lugubris 
-b %>% filter(id %in% species$id[species$sp == 'paralugubris']) -> b
+# manually add 22st304b which was missing from mtdna seqs
+b %>% filter(id %in% c(species$id[species$sp == 'paralugubris'],'22st304b')) -> b
 
 
 # change coordinates to N/E
